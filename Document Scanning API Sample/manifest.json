@@ -1,0 +1,22 @@
+// 20170508183221
+// https://developer.chrome.com/extensions/examples/api/document_scan/manifest.json
+
+{
+  "name": "Document Scanning API Sample",
+  "version": "0.1",
+  "manifest_version": 2,
+  "minimum_chrome_version": "37",
+  "app": {
+    "background": {
+      "scripts": [
+        "background.js"
+      ]
+    }
+  },
+  "permissions": [
+    
+  ],
+  "optional_permissions": [
+    "documentScan"
+  ]
+}
