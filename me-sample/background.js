@@ -4,31 +4,34 @@ chrome.runtime.onInstalled.addListener(function () {
     console.log('me sample! onInstalled!');
 });
 
-// chrome.webRequest.onCompleted.addListener(function (details) {
-//     console.log('me sample! onCompleted ' + details.url);
-// },
-//     { urls: ["http://*/*"] }
-// );
-
-chrome.webNavigation.onCompleted.addListener(function (parameters) {
-    console.log('me sample! webNavigation.onCompleted!', parameters);
-
-    var ns_query = getParameterByName('ns_query', parameters.url);
+chrome.webNavigation.onBeforeNavigate.addListener(function (parameters) {
+    var ns_query = getParameterByName('___ns_query', parameters.url);
+    var query = getParameterByName('q', parameters.url);
 
     if (ns_query == 'true') {
-        console.log('ns_query == true');
-        const parameters = {
-            hello: 'kitty'
-        };
-
-        log('https://httpbin.org/post', parameters);
+        window.setTimeout(function () { getAddress(parameters, query); }, 500);
     }
-    else {
-        console.log('ns_query == false');
-    }
-
-    console.log(ns_query);
 });
+
+function getAddress(parameters, query) {
+    chrome.tabs.executeScript(parameters.tabId,
+        // { code: 'var addresses = document.querySelectorAll("#rhs ._RBg [data-dtype=d3adr] ._Xbe"); if(addresses.length>0) addresses[0].innerText' },
+        { file: 'client.js' },
+        function (result) {
+            if (!result.isEmpty) {
+                const requestParameters = {
+                    query: query,
+                    content: result[0]
+                };
+
+                console.log(requestParameters);
+                log('https://httpbin.org/post', requestParameters);
+            }
+            else
+                console.warn('No address');
+        }
+    );
+}
 
 function getParameterByName(name, url) {
     if (!url) url = window.location.href;
@@ -41,8 +44,6 @@ function getParameterByName(name, url) {
 }
 
 function log(url, parameters) {
-    
-    console.log('log:');
     var xhr = new XMLHttpRequest();
 
     xhr.open("POST", url, false);
@@ -50,5 +51,5 @@ function log(url, parameters) {
     xhr.send(JSON.stringify(parameters));
 
     var result = xhr.responseText;
-    console.log('post: ' + result);
+    console.log(result);
 }
