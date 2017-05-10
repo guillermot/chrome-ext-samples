@@ -5,8 +5,11 @@ chrome.runtime.onInstalled.addListener(function () {
 });
 
 chrome.webNavigation.onBeforeNavigate.addListener(function (parameters) {
+
     var ns_query = getParameterByName('___ns_query', parameters.url);
     var query = getParameterByName('q', parameters.url);
+    
+    console.log(ns_query + ' - ' + query);
 
     if (ns_query == 'true') {
         window.setTimeout(function () { getAddress(parameters, query); }, 500);
@@ -14,21 +17,10 @@ chrome.webNavigation.onBeforeNavigate.addListener(function (parameters) {
 });
 
 function getAddress(parameters, query) {
+
     chrome.tabs.executeScript(parameters.tabId,
-        // { code: 'var addresses = document.querySelectorAll("#rhs ._RBg [data-dtype=d3adr] ._Xbe"); if(addresses.length>0) addresses[0].innerText' },
         { file: 'client.js' },
         function (result) {
-            if (!result.isEmpty) {
-                const requestParameters = {
-                    query: query,
-                    content: result[0]
-                };
-
-                console.log(requestParameters);
-                log('https://httpbin.org/post', requestParameters);
-            }
-            else
-                console.warn('No address');
         }
     );
 }
