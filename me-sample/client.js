@@ -1,23 +1,28 @@
+// Creating popover
 var popover = document.createElement('div');
 popover.setAttribute('id', 'ns_popover');
 popover.setAttribute('class', ' gb_ha gb_g');
 popover.setAttribute('style', ' top: 273px; left: -221px; width: 210px;');
 popover.innerHTML = '<div class="gb_qb"><p><strong>Nosis Leads</strong></p><p>¿Desea confirmar la dirección?</p><p><button id="ns_popover_accept">Aceptar</button><button id="ns_popover_cancel">Cancelar</button></p></div>';;
 
+// Creating arrow
 var arrow = document.createElement('div');
 arrow.setAttribute('id', 'ns_popover_arrow');
 arrow.setAttribute('class', 'gb_lb');
 arrow.setAttribute('style', 'width: 0; height: 0; border-top: 10px solid transparent; border-bottom: 10px solid transparent; border-left: 10px solid #c5c5c5; display: block; top: 291px; left: -9px;');
 
+// Adding to the business card
 var card = document.querySelectorAll("#rhs ._RBg")[0];
 card.appendChild(popover);
 card.appendChild(arrow);
 
+// Handling the cancel button
 document.getElementById('ns_popover_cancel').addEventListener('click', function () {
     document.getElementById("ns_popover").remove();
     document.getElementById("ns_popover_arrow").remove();
 });
 
+// Handling the accept button
 document.getElementById('ns_popover_accept').addEventListener('click', function () {
     var xhr = new XMLHttpRequest();
 
